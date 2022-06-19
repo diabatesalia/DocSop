@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <form class="card card-sm">
+                <div class="card-body row no-gutters aling-items-center">
+                    <div class="col">
+                        <input type="search" placeholder="Entrez votre recherche" name="item-name" class="form-control form-control-borderless">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-success">Recherche</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-3">
+            <div class="card">
+                <img src="{{ product.images.url }}" width="250px" height="250px" alt="" class="card-img-top">
+                <div class="card-body">
+                    <div class="card-title">Titre : {{ product.name }}</div>
+                    <div class="card-text">Prix : {{ product.price }} CFA</div>
+                    <a href="{{ product.id }}" class="btn btn-warning">Detail</a>
+                    <button id="{{ product.id }}" class="btn ted btn-success">Ajouter</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-3 offset-md-4">
+            <ul class="pagination">
+                {% if products.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.previous_page_number }}">Precedent</a>
+                    </li>
+                {% endif %}
+
+                    <li class="page-item active">
+                        <a class="page-link" href="?page={{ products.number }}">{{ products.number }}</a>
+                    </li>
+
+                {% if products.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.next_page_number }}">Suivant</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript">
+        console.log('teste diabate');
+        if(localStorage.getItem('panier') == null){
+            var panier = {};
+        }else{
+            panier = JSON.parse(localStorage.getItem('panier'));
+        }
+        $(document).on('click', '.ted', function(){
+            console.log('ajouter');
+            var item_id = this.id.toString();
+            console.log(item_id);
+            if(panier[item_id] != undefined){
+                panier[item_id] = panier[item_id] +1
+            }else{
+                panier[item_id] = 1;
+            }
+            console.log(panier);
+            localStorage.setItem('panier', JSON.stringify(panier));
+            document.getElementById("panier").innerHTML ="Panier("+ Object.keys(panier).length+")";
+        });
+        $(function () {
+            $('[data-toggle="popover"]').popover();
+            document.getElementById('panier').setAttribute('data-content', '<h5>Votre Commande</h5>');
+        })
+    </script>
+{% endblock %}

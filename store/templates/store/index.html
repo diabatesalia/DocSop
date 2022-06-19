@@ -23,7 +23,7 @@
             <div class="card">
                 <img src="{{ product.images.url }}" width="250px" height="250px" alt="" class="card-img-top">
                 <div class="card-body">
-                    <div class="card-title">Titre : {{ product.name }}</div>
+                    <div id="aa{{ product.id }}" class="card-title">Titre : {{ product.name }}</div>
                     <div class="card-text">Prix : {{ product.price }} CFA</div>
                     <a href="{{ product.id }}" class="btn btn-warning">Detail</a>
                     <button id="{{ product.id }}" class="btn ted btn-success">Ajouter</button>
@@ -82,6 +82,7 @@
         $(function () {
             $('[data-toggle="popover"]').popover();
             document.getElementById('panier').setAttribute('data-content', '<h5>Votre Commande</h5>');
-        })
+        });
+        
     </script>
 {% endblock %}
